@@ -4,6 +4,7 @@ import os
 import psutil
 import re
 import socket
+import moment
 
 from plotmanager.library.utilities.instrumentation import increment_plots_completed
 from plotmanager.library.utilities.notifications import send_notifications
@@ -20,7 +21,7 @@ def _analyze_log_end_date(contents):
         return False
     total_seconds, date_raw = match.groups()
     total_seconds = pretty_print_time(int(float(total_seconds)))
-    parsed_date = dateparser.parse(date_raw)
+    parsed_date = moment.date(date_raw)
     return dict(
         total_seconds=total_seconds,
         date=parsed_date,
@@ -33,7 +34,7 @@ def _get_date_summary(analysis):
         if analysis['files'][file_path]['checked']:
             continue
         analysis['files'][file_path]['checked'] = True
-        end_date = analysis['files'][file_path]['data']['date'].date()
+        end_date = analysis['files'][file_path]['data']['date'].date
         if end_date not in summary:
             summary[end_date] = 0
         summary[end_date] += 1
